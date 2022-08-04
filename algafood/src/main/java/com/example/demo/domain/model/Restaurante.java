@@ -48,7 +48,7 @@ public class Restaurante {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj) { 
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -57,7 +57,7 @@ public class Restaurante {
 			return false;
 		Restaurante other = (Restaurante) obj;
 		return Objects.equals(id, other.id);
-	}
+	} 
 	
 	
 	
