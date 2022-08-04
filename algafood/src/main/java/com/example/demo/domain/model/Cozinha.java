@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-public class cozinha {
+public class Cozinha {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID
@@ -47,7 +47,7 @@ public class cozinha {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		cozinha other = (cozinha) obj;
+		Cozinha other = (Cozinha) obj;
 		return Objects.equals(id, other.id);
 	}
 	
