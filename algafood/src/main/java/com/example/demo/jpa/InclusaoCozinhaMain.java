@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import com.example.demo.AlgafoodApplication;
 import com.example.demo.domain.model.Cozinha;
 
-public class ConsultaCozinhaMain {
+public class InclusaoCozinhaMain {
 
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApplication.class)
@@ -18,12 +18,10 @@ public class ConsultaCozinhaMain {
 		
 		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
 		
-		List<Cozinha> cozinhas = cadastroCozinha.listar();
-		
-		for (Cozinha cozinha : cozinhas) {
-			System.out.println(cozinha.getNome());
-			//listar cozinhas
-		}
+	Cozinha cozinha1 = new Cozinha();
+	cozinha1.setNome("Brasileira");
+	
+	cadastroCozinha.adicionar(cozinha1);
 
 }
 }
