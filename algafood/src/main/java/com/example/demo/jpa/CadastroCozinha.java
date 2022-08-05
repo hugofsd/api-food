@@ -23,6 +23,7 @@ public class CadastroCozinha {
 	
 	}
 	
+	// metodo capas de salvar e editar
 	@Transactional
     public Cozinha adicionar(Cozinha cozinha) {
 		return manager.merge(cozinha);
