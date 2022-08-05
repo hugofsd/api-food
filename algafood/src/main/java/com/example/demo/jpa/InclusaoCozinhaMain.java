@@ -21,7 +21,7 @@ public class InclusaoCozinhaMain {
 	Cozinha cozinha1 = new Cozinha();
 	cozinha1.setNome("Brasileira");
 	
-	cadastroCozinha.adicionar(cozinha1);
+	cadastroCozinha.salvar(cozinha1);
 
 }
 }
