@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.example.demo.AlgafoodApplication;
 import com.example.demo.domain.model.Cozinha;
+import com.example.demo.domain.repository.CozinhaRepository;
 
 public class BuscarCozinhaMain {
 
@@ -16,12 +17,12 @@ public class BuscarCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+		CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
 		
 		// 1L, 1 id, de tipo long
-		Cozinha cozinha = cadastroCozinha.buscar(1L);
+		Object cozinha = cozinhaRepository.buscar(1L);
 		
-			System.out.println(cozinha.getNome());
+			System.out.println(((Cozinha) cozinha).getNome());
 	
 }
 }
