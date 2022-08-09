@@ -17,7 +17,7 @@ import com.example.demo.domain.repository.RestauranteRepository;
 // Classe para implementar de como fazer o acesso ao banco, 
 // impl implementação
 @Component
-public class RestauranteRepositoryImpl implements RestauranteRepository<Restaurante>{
+public class RestauranteRepositoryImpl implements RestauranteRepository{
 
 	@PersistenceContext
 	private EntityManager manager;

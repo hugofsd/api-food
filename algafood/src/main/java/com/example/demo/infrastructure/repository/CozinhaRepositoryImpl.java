@@ -15,7 +15,7 @@ import com.example.demo.domain.repository.CozinhaRepository;
 // Classe para implementar de como fazer o acesso ao banco, 
 // impl implementação
 @Component
-public class CozinhaRepositoryImpl implements CozinhaRepository<Cozinha>{
+public class CozinhaRepositoryImpl implements CozinhaRepository{
 
 	@PersistenceContext // engetar o manager
 	private EntityManager manager; //para salvar e fazer consultas.

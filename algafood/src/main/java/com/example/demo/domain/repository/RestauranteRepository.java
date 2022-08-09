@@ -2,7 +2,9 @@ package com.example.demo.domain.repository;
 
 import java.util.List;
 
-public interface RestauranteRepository<Restaurante> {
+import com.example.demo.domain.model.Restaurante;
+
+public interface RestauranteRepository{
 
 	List<Restaurante> listar();
 	
