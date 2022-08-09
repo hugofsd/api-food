@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Restaurante {
@@ -19,6 +20,19 @@ public class Restaurante {
 	private String nome;
 	
 	private BigDecimal taxaFrete;
+	
+	@ManyToOne // muitos restaurantes tem 1 cozinha
+	private Cozinha cozinha;
+	
+	
+
+	public Cozinha getCozinha() {
+		return cozinha;
+	}
+
+	public void setCozinha(Cozinha cozinha) {
+		this.cozinha = cozinha;
+	}
 
 	public Long getId() {
 		return id;
