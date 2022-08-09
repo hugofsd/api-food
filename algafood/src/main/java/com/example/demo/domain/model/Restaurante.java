@@ -18,12 +18,15 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID
 	private Long id;
 	
+	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
+	
+	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
 	@ManyToOne // muitos restaurantes tem 1 cozinha
-	@JoinColumn(name="cozinha_id") // nome da coluna
+	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;
 	
 	

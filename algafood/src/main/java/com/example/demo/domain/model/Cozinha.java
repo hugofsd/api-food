@@ -24,6 +24,7 @@ public class Cozinha {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID
 	private Long id;
 	
+	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
 	
