@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -22,6 +23,7 @@ public class Restaurante {
 	private BigDecimal taxaFrete;
 	
 	@ManyToOne // muitos restaurantes tem 1 cozinha
+	@JoinColumn(name="cozinha_id") // nome da coluna
 	private Cozinha cozinha;
 	
 	
