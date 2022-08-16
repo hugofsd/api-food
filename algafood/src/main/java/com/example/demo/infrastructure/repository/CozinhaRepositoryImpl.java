@@ -7,6 +7,7 @@ import java.util.function.Function;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,8 +50,14 @@ public class CozinhaRepositoryImpl implements CozinhaRepository{
 	
 	@Transactional
 	@Override
-	public void remover(Cozinha cozinha) {
-		cozinha = buscar(cozinha.getId());
+	public void remover(Long id) {
+		Cozinha cozinha = buscar(id);
+		
+		if(cozinha == null) {
+			//EmptyResultDataAccessException: id n existe
+			throw new EmptyResultDataAccessException(1);
+		}
+		
 		manager.remove(cozinha);	
 	}
 
