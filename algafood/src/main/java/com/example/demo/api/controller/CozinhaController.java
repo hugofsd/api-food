@@ -61,7 +61,8 @@ public class CozinhaController {
 	
 	//ResponseEntity usado pois o obj será tratado
 	@PutMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId,
+	@RequestBody Cozinha cozinha) {
 		
 		//buscar a cozinha
 		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
@@ -72,7 +73,7 @@ public class CozinhaController {
 		    // em aspas são declaradas as propriedades ignoradas
 			
 		    //salvar cozinha atual
-		    cozinhaRepository.salvar(cozinhaAtual);
+		    cozinhaAtual = cadastroCozinhaService.salvar(cozinhaAtual);
 		    
 		    //status ok
 		    return ResponseEntity.ok(cozinhaAtual);
