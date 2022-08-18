@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.model.Cozinha;
@@ -22,7 +23,7 @@ import com.example.demo.domain.repository.CozinhaRepository;
 // pacote infrastructure para fazer regras que não são de negocio. Ex: envio de e-mail
 // Classe para implementar de como fazer o acesso ao banco, 
 // impl implementação
-@Component
+@Repository
 public class CozinhaRepositoryImpl implements CozinhaRepository{
 
 	@PersistenceContext // engetar o manager
@@ -33,6 +34,14 @@ public class CozinhaRepositoryImpl implements CozinhaRepository{
 		return manager.createQuery("from Cozinha", Cozinha.class)
 				.getResultList();
 	
+	}
+	
+	@Override
+	public List<Cozinha> consultarPorNome(String nome) {
+		//like: que contenha parte do nome
+		return manager.createQuery("from Cozinha where nome like :nome", Cozinha.class)
+				.setParameter("nome", "%" +  nome + "%")
+				.getResultList();
 	}
 	
 	// metodo capas de salvar e editar
