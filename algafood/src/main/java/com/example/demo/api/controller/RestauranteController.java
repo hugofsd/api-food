@@ -1,10 +1,12 @@
 package com.example.demo.api.controller;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -98,7 +100,7 @@ public class RestauranteController {
 		
 	}
 	
-	
+	//NÃO VALE O ESFORÇO o!o
 	@PatchMapping("/{restauranteId}")
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
 				@RequestBody Map<String, Object> campos){
@@ -111,16 +113,18 @@ public class RestauranteController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		
-		merge(campos);
-			
+		//metodo de mesclar o valor de map para dentro do restaurante autal
+		merge(campos, restauranteAtual);
 			
 		return atualizar(restauranteId, restauranteAtual);
 	}
 
-	private void merge(Map<String, Object> campos) {
-		campos.forEach((nomePropriedade, valorPropriedade) -> {
+	//func refatorada by: click direito > refactor > extract method > ok
+	private void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
+		camposOrigem.forEach((nomePropriedade, valorPropriedade) -> {
 		
+			Field field = ReflectionUtils.findRequiredField(Restaurante.class, nomePropriedade);
+			
 			System.out.println(nomePropriedade + " = " + valorPropriedade);
 				
 		});
