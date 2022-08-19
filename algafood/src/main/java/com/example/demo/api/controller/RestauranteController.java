@@ -3,6 +3,7 @@ package com.example.demo.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,15 @@ public class RestauranteController {
 	// Deu certo apenas dando run do AlgaFoodApplication
 	@GetMapping (produces = MediaType.APPLICATION_JSON_VALUE) // Retorno apenas em json
 	public List<Restaurante> listar() {
-		return restauranteRepository.listar();
+		return restauranteRepository.findAll();
 	}
 	
 	@GetMapping ("/{restauranteId}")
 	public  ResponseEntity<Restaurante>  buscar( @PathVariable("restauranteId") Long restauranteId) {
-		Restaurante restaurante = restauranteRepository.buscar(restauranteId);
+		Optional <Restaurante> restaurante = restauranteRepository.findById(restauranteId);
 		
-		if(restauranteId != null ) {
-			return ResponseEntity.ok(restaurante);
+		if( restaurante.isPresent() ) {
+			return ResponseEntity.ok(restaurante.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -75,18 +76,17 @@ public class RestauranteController {
 		
 		try {
 			//buscar o restaurante
-			Restaurante restauranteAutual = restauranteRepository
-			.buscar(restauranteId);
+			Optional <Restaurante>  restauranteAtual = restauranteRepository.findById(restauranteId);
 			
-			if(restauranteAutual != null) {
+			if(restauranteAtual.isPresent()) {
 				//copiar o obj recebido e passar para o obj atual
-				BeanUtils.copyProperties(restaurante, restauranteAutual, "id");
+				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id");
 	            // em aspas são declaradas as propriedades ignoradas
 				
 			    //salvar cozinha atual
-				restauranteAutual = cadastroRestauranteService.salvar(restauranteAutual);
+				Restaurante restauranteSalva = cadastroRestauranteService.salvar(restauranteAtual.get());
 				 //status ok
-			    return ResponseEntity.ok(restauranteAutual);
+			    return ResponseEntity.ok(restauranteSalva);
 			} else {
 				return ResponseEntity.notFound().build();
 			}
@@ -99,36 +99,5 @@ public class RestauranteController {
 		
 		
 	}
-	
-	//NÃO VALE O ESFORÇO o!o
-	@PatchMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
-				@RequestBody Map<String, Object> campos){
-		
-		//buscar o restaurante
-		Restaurante restauranteAtual = restauranteRepository
-		.buscar(restauranteId);
-		
-		if(restauranteAtual == null) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		//metodo de mesclar o valor de map para dentro do restaurante autal
-		merge(campos, restauranteAtual);
-			
-		return atualizar(restauranteId, restauranteAtual);
-	}
-
-	//func refatorada by: click direito > refactor > extract method > ok
-	private void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
-		camposOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-		
-			Field field = ReflectionUtils.findRequiredField(Restaurante.class, nomePropriedade);
-			
-			System.out.println(nomePropriedade + " = " + valorPropriedade);
-				
-		});
-	}
-	
 
 }

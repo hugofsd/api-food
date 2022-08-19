@@ -17,12 +17,12 @@ public class CadastroCidadeService {
 	private CidadeRepository cidadeRepository;
 	
 	public Cidade salvar(Cidade cidade) {
-		return cidadeRepository.salvar(cidade);
+		return cidadeRepository.save(cidade);
 	}
 	
 	public void excluir (Long cidadeId) {
       try {
-    	  cidadeRepository.remover(cidadeId);
+    	  cidadeRepository.deleteById(cidadeId);
           } catch (EmptyResultDataAccessException erro) {
     		//throw é um statement q manda a exceção ser lançada
 			throw new EntidadeNaoEncontradaException(

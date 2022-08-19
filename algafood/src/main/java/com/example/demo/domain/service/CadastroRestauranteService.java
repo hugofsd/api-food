@@ -1,5 +1,7 @@
 package com.example.demo.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +24,15 @@ public class CadastroRestauranteService {
 		
 		//buscar id da cozinha atrelada ao restaurante
 		Long cozinhaId = restaurante.getCozinha().getId();
-		
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-		
-		if(cozinha == null) {
-			throw new EntidadeNaoEncontradaException(
-			String.format("Não existe cadastro de cozinha com o codigo %d", cozinhaId));
-			
-		}
+		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
+				.orElseThrow(() -> new  EntidadeNaoEncontradaException(
+						String.format("Não existe cadastro de cozinha com o codigo %d", cozinhaId)));
+				
+		//orElseThrow chamar opção de erro.
 		
 		restaurante.setCozinha(cozinha);
 		
-		return restauranteRepository.salvar(restaurante);
+		return restauranteRepository.save(restaurante);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.example.demo.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +35,15 @@ public class EstadoController {
 	
 	@GetMapping
 	public List<Estado> listar(){
-		return estadoRepository.listar();
+		return estadoRepository.findAll();
 	}
 	
 	@GetMapping ("/{estadoId}")
 	public ResponseEntity<Estado> buscar( @PathVariable("estadoId") Long estadoId ) {
-		Estado estado = estadoRepository.buscar(estadoId);
+		Optional <Estado>  estado = estadoRepository.findById(estadoId);
 		
-		if(estado != null) {
-			return ResponseEntity.ok(estado);
+		if(estado.isPresent()) {
+			return ResponseEntity.ok(estado.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -54,18 +55,18 @@ public class EstadoController {
 			@RequestBody Estado estado){
 		
 		//buscar a estado
-		Estado estadoAtual = estadoRepository.buscar(estadoId);
+		Optional <Estado> estadoAtual = estadoRepository.findById(estadoId);
 		
 		if(estadoAtual != null) {
 			//copiar o obj recebido e passar para o obj atual
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
+			BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
 			 // em aspas são declaradas as propriedades ignoradas
 			
 			//salvar estado atual
-			estadoAtual = cadastroEstadoService.salvar(estadoAtual);
+			Estado estadoSalva = cadastroEstadoService.salvar(estadoAtual.get());
 			
 			//status ok
-			return ResponseEntity.ok(estadoAtual);
+			return ResponseEntity.ok(estadoSalva);
 		
 		} else {
 			return ResponseEntity.notFound().build();

@@ -1,6 +1,7 @@
 package com.example.demo.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +38,16 @@ public class CozinhaController {
 	// Deu certo apenas dando run do AlgaFoodApplication
 	@GetMapping (produces = MediaType.APPLICATION_JSON_VALUE) // Retorno apenas em json
 	public List<Cozinha> listar() {
-		return cozinhaRepository.listar();
+		return cozinhaRepository.findAll();
 	}
 	
 	@GetMapping ("/{cozinhaId}")
 	public  ResponseEntity<Cozinha>  buscar( @PathVariable("cozinhaId") Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+		Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
 		
-		if(cozinha != null ) {
-			return ResponseEntity.ok(cozinha);
+		//se cozinha está presente
+		if(cozinha.isPresent() ) {
+			return ResponseEntity.ok(cozinha.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -65,18 +67,18 @@ public class CozinhaController {
 	@RequestBody Cozinha cozinha) {
 		
 		//buscar a cozinha
-		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+		Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
 		
-		if(cozinhaAtual != null) {
+		if(cozinhaAtual.isPresent()) {
 			//copiar o obj recebido e passar para o obj atual
-		    BeanUtils.copyProperties(cozinha, cozinhaAtual, "id"); 
+		    BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id"); 
 		    // em aspas são declaradas as propriedades ignoradas
 			
 		    //salvar cozinha atual
-		    cozinhaAtual = cadastroCozinhaService.salvar(cozinhaAtual);
+		    Cozinha cozinhaSalva = cadastroCozinhaService.salvar(cozinhaAtual.get());
 		    
 		    //status ok
-		    return ResponseEntity.ok(cozinhaAtual);
+		    return ResponseEntity.ok(cozinhaSalva);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -99,29 +101,4 @@ public class CozinhaController {
 		
 	}
 	 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//@ResponseStatus(HttpStatus.OK) // Escolher status
-	@GetMapping ("controleStatus/{cozinhaId}")
-	public ResponseEntity<Cozinha> buscarComControleStatus( @PathVariable("cozinhaId") Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-		
-		//exemplos de retornos com status
-		return ResponseEntity.status(HttpStatus.OK).body(cozinha); 
-		//return ResponseEntity.ok(cozinha);
-	}
-	
 }
