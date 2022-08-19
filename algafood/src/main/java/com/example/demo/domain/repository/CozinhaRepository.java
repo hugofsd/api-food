@@ -11,12 +11,15 @@ import com.example.demo.domain.model.Cozinha;
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long>{
 
-
+	 //METODOS DE CONSULTA SALVOS EM PASTA DOC
 	// depois do by vem os criterios, Containing depois do nome da var para localziar por letra
 	List<Cozinha> findByNomeContaining(String nome);
 	
 	Optional<Cozinha> findUnicoByNome(String nome);
 	
-   //METODOS DE CONSULTA SALVOS EM PASTA DOC
+	//existencia do nome por true ou false
+	boolean existsByNome(String nome);
+	
+  
 	
 } 
