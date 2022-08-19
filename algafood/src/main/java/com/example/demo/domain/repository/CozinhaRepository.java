@@ -12,10 +12,11 @@ import com.example.demo.domain.model.Cozinha;
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long>{
 
 
-	// depois do by vem os criterios
-	List<Cozinha> findByNome(String nome);
+	// depois do by vem os criterios, Containing depois do nome da var para localziar por letra
+	List<Cozinha> findByNomeContaining(String nome);
 	
 	Optional<Cozinha> findUnicoByNome(String nome);
 	
-
+   //METODOS DE CONSULTA SALVOS EM PASTA DOC
+	
 } 
