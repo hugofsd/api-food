@@ -1,6 +1,7 @@
 package com.example.demo.domain.repository.restaurante;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,19 +37,30 @@ public class RestauranteRepositoryImpl implements RestaurtanteRepositoryQuery {
 	Root<Restaurante> root = criteria.from(Restaurante.class); //from restaurante
 	// from
 	
-	//like
-	Predicate nomePredicate = builder
-			.like(root.get("nome"), "%" + nome + "%");
+	var predicates = new ArrayList<Predicate>();
 	
-	//maior ou igual
-	Predicate taxaInicialPredicate = builder
-			.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
+	// se existir texto dentro do var nome.
+	if (StringUtils.hasText(nome)) {
+		//like
+		predicates.add(builder
+				.like(root.get("nome"), "%" + nome + "%"));
+	}
 	
-	//menor(less) ou igual
-	Predicate taxaFinalPredicate = builder
-			.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+	if(taxaFreteInicial != null) {
+		//maior ou igual
+		predicates.add(builder
+				.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+	}
 	
-	criteria.where(nomePredicate, taxaInicialPredicate, taxaFinalPredicate);
+	if(taxaFreteFinal != null) {
+		//maior ou igual
+		predicates.add(builder
+		.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+		
+	}
+	
+	//clausula responsavel de passar todos os predicatos
+	criteria.where(predicates.toArray(new Predicate[0]));
 	
     TypedQuery<Restaurante> query = manager.createQuery(criteria);
     return query.getResultList(); // retronar lista de restaurante
