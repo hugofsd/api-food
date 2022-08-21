@@ -14,8 +14,8 @@ import com.example.demo.domain.model.Cozinha;
 import com.example.demo.domain.model.Restaurante;
 import com.example.demo.domain.repository.CozinhaRepository;
 import com.example.demo.domain.repository.RestauranteRepository;
-import com.example.demo.domain.spec.copy.RestauranteComFreteGratisSpec;
-import com.example.demo.domain.spec.copy.RestauranteComNomeSemelhanteSpec;
+import com.example.demo.domain.spec.restaurante.RestauranteComFreteGratisSpec;
+import com.example.demo.domain.spec.restaurante.RestauranteComNomeSemelhanteSpec;
 
 @RestController
 @RequestMapping("/teste")

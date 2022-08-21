@@ -1,4 +1,4 @@
-package com.example.demo.domain.spec.copy;
+package com.example.demo.domain.spec.restaurante;
 
 import java.math.BigDecimal;
 
@@ -11,17 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.example.demo.domain.model.Restaurante;
 
-import lombok.AllArgsConstructor;
-
-//para receber o "nome" e atribuir a var de instancia
-@AllArgsConstructor
-public class RestauranteComNomeSemelhanteSpec implements Specification<Restaurante> {
+public class RestauranteComFreteGratisSpec implements Specification<Restaurante> {
 
 	
 	private static final long serialVersionUID = 1L;
-	
-	//recebe do impl
-	private String nome;
 
 	@Override
 	public Predicate toPredicate(Root<Restaurante> root, CriteriaQuery<?> query,
@@ -29,7 +22,7 @@ public class RestauranteComNomeSemelhanteSpec implements Specification<Restauran
 		// TODO Auto-generated method stub
 		
 
-		return builder.like(root.get("nome"), "%" + nome + "%");
+		return builder.equal(root.get("taxaFrete"), BigDecimal.ZERO);
 	}
 	
 
