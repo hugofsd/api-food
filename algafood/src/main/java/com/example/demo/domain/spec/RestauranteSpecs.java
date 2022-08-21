@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.example.demo.domain.model.Restaurante;
-import com.example.demo.domain.spec.restaurante.RestauranteComNomeSemelhanteSpec;
 
 public class RestauranteSpecs {
 

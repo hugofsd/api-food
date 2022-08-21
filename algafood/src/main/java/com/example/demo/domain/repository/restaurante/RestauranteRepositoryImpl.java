@@ -13,17 +13,25 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Predicate;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.example.demo.domain.model.Restaurante;
+import com.example.demo.domain.repository.RestauranteRepository;
+import com.example.demo.domain.spec.RestauranteSpecs;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestaurtanteRepositoryQuery {
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Autowired @Lazy //Lazy: avitar erro "circular references", 
+	//pois estou importando im repository na impl dele mesmo.
+	//"só vem quando pede"
+	private RestauranteRepository restauranteRepository;
 	
 	@Override
 	public List<Restaurante> find (String nome,
@@ -65,5 +73,11 @@ public class RestauranteRepositoryImpl implements RestaurtanteRepositoryQuery {
     TypedQuery<Restaurante> query = manager.createQuery(criteria);
     return query.getResultList(); // retronar lista de restaurante
    
+	}
+
+	@Override
+	public List<Restaurante> findComFreteGratis(String nome) {
+		return restauranteRepository.findAll(RestauranteSpecs.comFreteGratis()
+				.and(RestauranteSpecs.comNomeSemelhante(nome)));
 	}
 }
