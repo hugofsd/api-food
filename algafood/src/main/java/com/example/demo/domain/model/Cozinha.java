@@ -32,7 +32,7 @@ public class Cozinha {
 	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
-	@JsonIgnore // ignorar essa classe ao fazer consultas
+	//@JsonIgnore // ignorar essa classe ao fazer consultas
 	@OneToMany(mappedBy = "cozinha") // uma para muitos, uma cozinha pode ter muitos restaurantes
 	private List<Restaurante> restaurantes = new ArrayList<>();
 	
