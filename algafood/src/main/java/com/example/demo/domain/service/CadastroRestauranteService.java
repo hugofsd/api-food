@@ -24,6 +24,7 @@ public class CadastroRestauranteService {
 		
 		//buscar id da cozinha atrelada ao restaurante
 		Long cozinhaId = restaurante.getCozinha().getId();
+		
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
 				.orElseThrow(() -> new  EntidadeNaoEncontradaException(
 						String.format("Não existe cadastro de cozinha com o codigo %d", cozinhaId)));
