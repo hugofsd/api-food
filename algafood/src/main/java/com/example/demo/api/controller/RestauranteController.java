@@ -80,7 +80,7 @@ public class RestauranteController {
 			
 			if(restauranteAtual.isPresent()) {
 				//copiar o obj recebido e passar para o obj atual
-				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id", "formasPagamento");
+				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id", "formasPagamento","endereco");
 	            // em aspas são declaradas as propriedades ignoradas
 				
 			    //salvar cozinha atual

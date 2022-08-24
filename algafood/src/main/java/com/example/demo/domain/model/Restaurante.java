@@ -37,6 +37,7 @@ public class Restaurante {
 	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
+	@JsonIgnore
 	@Embedded // tipo encorporado
 	private Endereco endereco;
 	
@@ -45,7 +46,7 @@ public class Restaurante {
 	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;
 	
-	//@JsonIgnore //ocultar informação de Get
+	@JsonIgnore //ocultar informação de Get
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
