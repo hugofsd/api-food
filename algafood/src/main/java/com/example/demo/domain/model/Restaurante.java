@@ -1,6 +1,7 @@
 package com.example.demo.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,6 +44,17 @@ public class Restaurante {
 	@JsonIgnore
 	@Embedded // tipo encorporado
 	private Endereco endereco;
+	
+	@JsonIgnore
+	@CreationTimestamp //criar data automaticamente
+	@Column(nullable = false, columnDefinition = "datetime") //obrigatório, 
+	private LocalDateTime dataCadastro;
+	//datetime para tirar seg do bd
+	 
+	@JsonIgnore
+	@UpdateTimestamp //data hora atual sempre q atualizado
+	@Column(nullable = false, columnDefinition = "datetime") //obrigatório
+	private LocalDateTime dataAtualizacao;
 	
 	//@JsonIgnore 
 	@ManyToOne // muitos restaurantes tem 1 cozinha
