@@ -24,6 +24,9 @@ public class Produto {
 	private Long id;
 	
 	@Column(nullable = false)
+	private String nome;
+	
+	@Column(nullable = false)
 	private String descricao;
 	
 	@Column(nullable = false)
@@ -34,7 +37,7 @@ public class Produto {
 	
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	private Restaurante restaurtante;
+	private Restaurante restaurante;
 	 
 	
 

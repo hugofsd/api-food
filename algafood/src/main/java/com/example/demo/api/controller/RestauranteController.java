@@ -81,10 +81,10 @@ public class RestauranteController {
 			if(restauranteAtual.isPresent()) {
 				//copiar o obj recebido e passar para o obj atual
 				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id",
-						"formasPagamento","endereco","dataCadastro","dataAtualizacao");
+						"formasPagamento","endereco","dataCadastro","dataAtualizacao","produtos");
 	            // em aspas são declaradas as propriedades ignoradas
 				
-			    //salvar cozinha atual
+			    //salvar cozinha atual 
 				Restaurante restauranteSalva = cadastroRestauranteService.salvar(restauranteAtual.get());
 				 //status ok
 			    return ResponseEntity.ok(restauranteSalva);
