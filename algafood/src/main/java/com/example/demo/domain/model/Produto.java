@@ -1,7 +1,6 @@
 package com.example.demo.domain.model;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.JoinColumn;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,9 +33,9 @@ public class Produto {
 	private Boolean ativo;
 	
 	@ManyToOne
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	private Restaurante restaurtante;
-	
+	 
 	
 
 }
