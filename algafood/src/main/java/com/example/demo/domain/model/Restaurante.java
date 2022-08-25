@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,11 +59,13 @@ public class Restaurante {
 	@Column(nullable = false, columnDefinition = "datetime") //obrigatório
 	private LocalDateTime dataAtualizacao;
 	
-	//@JsonIgnore 
-	@ManyToOne // muitos restaurantes tem 1 cozinha
+	// muitos restaurantes tem 1 cozinha
+	//@JsonIgnoreProperties("hibernateLazyInitializer") //ignorar uma propriedade da cozinha
+	@JsonIgnore  //ignorar a cozinha
+	@ManyToOne(fetch = FetchType.LAZY) //Carregar apenas quando precisar, n fazer select
 	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;
-	
+	 
 	@JsonIgnore //ocultar informação de Get
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
