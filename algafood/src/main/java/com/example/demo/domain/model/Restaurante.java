@@ -61,12 +61,12 @@ public class Restaurante {
 	
 	// muitos restaurantes tem 1 cozinha
 	//@JsonIgnoreProperties("hibernateLazyInitializer") //ignorar uma propriedade da cozinha
-	@JsonIgnore  //ignorar a cozinha
+	//@JsonIgnore  //ignorar a cozinha
 	@ManyToOne(fetch = FetchType.LAZY) //Carregar apenas quando precisar, n fazer select
 	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;
 	 
-	//@JsonIgnore //ocultar informação de Get
+	@JsonIgnore //ocultar informação de Get
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
