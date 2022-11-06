@@ -43,15 +43,9 @@ public class CozinhaController {
 	}
 	
 	@GetMapping ("/{cozinhaId}")
-	public  ResponseEntity<Cozinha>  buscar( @PathVariable("cozinhaId") Long cozinhaId) {
-		Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
+	public  Cozinha  buscar( @PathVariable("cozinhaId") Long cozinhaId) {
 		
-		//se cozinha está presente
-		if(cozinha.isPresent() ) {
-			return ResponseEntity.ok(cozinha.get());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
 	}
 	
@@ -64,44 +58,16 @@ public class CozinhaController {
 	
 	//ResponseEntity usado pois o obj será tratado
 	@PutMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId,
+	public Cozinha atualizar(@PathVariable Long cozinhaId,
 	@RequestBody Cozinha cozinha) {
 		
-		//buscar a cozinha
-		Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
+		Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
+	
+		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 		
-		if(cozinhaAtual.isPresent()) {
-			//copiar o obj recebido e passar para o obj atual
-		    BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id"); 
-		    // em aspas são declaradas as propriedades ignoradas
-			
-		    //salvar cozinha atual
-		    Cozinha cozinhaSalva = cadastroCozinhaService.salvar(cozinhaAtual.get());
-		    
-		    //status ok
-		    return ResponseEntity.ok(cozinhaSalva);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return cadastroCozinhaService.salvar(cozinhaAtual);
 		
 	}
-	
-//	@DeleteMapping("/{cozinhaId}")
-//	public ResponseEntity<Cozinha> remover( @PathVariable Long cozinhaId){
-//		try {
-//		cadastroCozinhaService.excluir(cozinhaId);
-//    	return ResponseEntity.noContent().build();	
-//		}
-//		
-////		catch(EntidadeNaoEncontradaException erro){
-////			return ResponseEntity.notFound().build();	
-////		}
-//		
-//		catch(EntidadeEmUsoException erro){
-//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
-//		
-//	}
 	
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

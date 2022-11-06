@@ -16,6 +16,13 @@ import com.example.demo.domain.repository.CozinhaRepository;
 @Service
 public class CadastroCozinhaService {
 	
+    //	constante
+	
+	private static final String  MSG_COZINHA_NAO_ENCONTRADA =
+			"Não existe um cadastro de cozinha com o codigo %d";
+	private static final String  MSG_COZINHA_EM_USO =
+			"Cozinha de código %d não pode ser removida, pois está em uso";
+	
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 	
@@ -31,13 +38,20 @@ public class CadastroCozinhaService {
 //			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 //			String.format("Não existe um cadastro de cozinha com o codigo %d", cozinhaId));		
 			throw new EntidadeNaoEncontradaException(
-			String.format("Não existe um cadastro de cozinha com o codigo %d", cozinhaId));	
+			String.format(MSG_COZINHA_NAO_ENCONTRADA, cozinhaId));	
 		}
 		 catch(DataIntegrityViolationException erro){
 			throw new EntidadeEmUsoException(
-			String.format("Cozinha de código %d não pode ser removida, pois está em uso", cozinhaId));
+			String.format(MSG_COZINHA_EM_USO, cozinhaId));
 		}
 		
+	}
+	
+	public Cozinha buscarOuFalhar(Long cozinhaId) {
+		 return cozinhaRepository.findById(cozinhaId)
+				 .orElseThrow(() -> new 
+	EntidadeNaoEncontradaException(
+	String.format(MSG_COZINHA_NAO_ENCONTRADA, cozinhaId)));
 	}
 
 }
