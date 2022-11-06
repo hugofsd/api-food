@@ -13,6 +13,10 @@ import com.example.demo.domain.repository.RestauranteRepository;
 
 @Service
 public class CadastroRestauranteService {
+	
+	//mensagens estaticas
+	private static final String MSG_RESTAURANTE_NAO_ENCONTRADO 
+    = "Não existe um cadastro de restaurante com código %d";
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -20,20 +24,27 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 	
+	@Autowired
+	private CadastroCozinhaService cadastoCozinhaService;
+	
 	public Restaurante salvar (Restaurante restaurante) {
 		
 		//buscar id da cozinha atrelada ao restaurante
 		Long cozinhaId = restaurante.getCozinha().getId();
 		
-		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-				.orElseThrow(() -> new  EntidadeNaoEncontradaException(
-						String.format("Não existe cadastro de cozinha com o codigo %d", cozinhaId)));
+		Cozinha cozinha = cadastoCozinhaService.buscarOuFalhar(cozinhaId);
 				
 		//orElseThrow chamar opção de erro.
 		
 		restaurante.setCozinha(cozinha);
 		
 		return restauranteRepository.save(restaurante);
+	}
+	
+	public Restaurante buscarOuFalhar(Long restauranteId) {
+	    return restauranteRepository.findById(restauranteId)
+	        .orElseThrow(() -> new EntidadeNaoEncontradaException(
+	                String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
 	}
 	
 }

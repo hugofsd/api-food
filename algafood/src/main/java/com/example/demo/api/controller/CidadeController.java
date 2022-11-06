@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.model.Cidade;
+import com.example.demo.domain.model.Estado;
 import com.example.demo.domain.repository.CidadeRepository;
 import com.example.demo.domain.repository.EstadoRepository;
 import com.example.demo.domain.service.CadastroCidadeService;
@@ -40,51 +41,27 @@ public class CidadeController {
 	}
 	
 	@GetMapping ("/{cidadeId}")
-	public ResponseEntity<Cidade> buscar(@PathVariable("cidadeId") Long cidadeId){
-		Optional <Cidade> cidade = cidadeRepository.findById(cidadeId);
-		
-		if(cidade.isPresent() ) {
-			return ResponseEntity.ok(cidade.get());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public Cidade buscar(@PathVariable("cidadeId") Long cidadeId){
+		return cadastroCidadeService.buscarOuFalhar(cidadeId);
 	}
 	
 	@PutMapping ("/{cidadeId}")
-	public ResponseEntity<Cidade> atualizar(@PathVariable("cidadeId") Long cidadeId,
+	public Cidade atualizar(@PathVariable("cidadeId") Long cidadeId,
 			@RequestBody Cidade cidade){
 		
 		//buscar cidade
-		Optional <Cidade> cidadeAtual = cidadeRepository.findById(cidadeId);
+		Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		
-		if(cidadeAtual.isPresent()) {
-			//copiar o obj recebido e passar para o obj atual
-			BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
-			// em aspas são  declaradas as propriedades ignoradas
-			
-			//salvar
-			Cidade cidadeSalva = cadastroCidadeService.salvar(cidadeAtual.get());
+		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 		
-			//status ok
-			return ResponseEntity.ok(cidadeSalva);
-		} else {
-			return ResponseEntity.notFound().build();
-		    }
+		return cadastroCidadeService.salvar(cidadeAtual);
+		
 		}
 	
 	@DeleteMapping("/{cidadeId}")
-	public ResponseEntity<Cidade> remover (@PathVariable Long cidadeId){
-		
-			try {
-				cadastroCidadeService.excluir(cidadeId);
-				return ResponseEntity.noContent().build();
-			} catch(EntidadeNaoEncontradaException erro){
-				return ResponseEntity.notFound().build();	
-			} catch(EntidadeEmUsoException erro){
-				return ResponseEntity.status(HttpStatus.CONFLICT).build();
-			}
-		
-		
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover (@PathVariable Long cidadeId){
+	   cadastroCidadeService.excluir(cidadeId);
 	}
 	
 	@PostMapping

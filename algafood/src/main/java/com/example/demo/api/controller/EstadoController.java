@@ -39,52 +39,28 @@ public class EstadoController {
 	}
 	
 	@GetMapping ("/{estadoId}")
-	public ResponseEntity<Estado> buscar( @PathVariable("estadoId") Long estadoId ) {
-		Optional <Estado>  estado = estadoRepository.findById(estadoId);
-		
-		if(estado.isPresent()) {
-			return ResponseEntity.ok(estado.get());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public Estado buscar( @PathVariable("estadoId") Long estadoId ) {
+		return cadastroEstadoService.buscarOuFalhar(estadoId);
 	}
 	
-	//ResponseEntity usado pois o obj será tratado
+	//ResponseEntity usado caso o obg seja tratado
 	@PutMapping("/{estadoId}")
-	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId,
+	public Estado atualizar(@PathVariable Long estadoId,
 			@RequestBody Estado estado){
 		
-		//buscar a estado
-		Optional <Estado> estadoAtual = estadoRepository.findById(estadoId);
+		//buasca se estado existe
+		Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
 		
-		if(estadoAtual != null) {
-			//copiar o obj recebido e passar para o obj atual
-			BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
-			 // em aspas são declaradas as propriedades ignoradas
-			
-			//salvar estado atual
-			Estado estadoSalva = cadastroEstadoService.salvar(estadoAtual.get());
-			
-			//status ok
-			return ResponseEntity.ok(estadoSalva);
+		BeanUtils.copyProperties(estado, estadoAtual, "id");
 		
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return cadastroEstadoService.salvar(estadoAtual);
 		
 	}
 	
 	@DeleteMapping("/{estadoId}")
-	public ResponseEntity<Estado> remover ( @PathVariable Long estadoId){
-		try { 
-			cadastroEstadoService.excluir(estadoId);
-			return ResponseEntity.noContent().build();
-		} catch(EntidadeNaoEncontradaException erro){
-			return ResponseEntity.notFound().build();	
-		} catch(EntidadeEmUsoException erro){
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
-			
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover ( @PathVariable Long estadoId){
+		cadastroEstadoService.excluir(estadoId);
 	}
 	
 	@PostMapping

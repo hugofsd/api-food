@@ -43,61 +43,27 @@ public class RestauranteController {
 	}
 	
 	@GetMapping ("/{restauranteId}")
-	public  ResponseEntity<Restaurante>  buscar( @PathVariable("restauranteId") Long restauranteId) {
-		Optional <Restaurante> restaurante = restauranteRepository.findById(restauranteId);
-		
-		if( restaurante.isPresent() ) {
-			return ResponseEntity.ok(restaurante.get());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-
+	public  Restaurante buscar( @PathVariable("restauranteId") Long restauranteId) {
+	
+		return cadastroRestauranteService.buscarOuFalhar(restauranteId);
 	}
 	
 	//ResponseEntity usado para customizar o status com o tipo do corpo <> Restaurante
 	@PostMapping
-	public ResponseEntity<?> adicionar( @RequestBody Restaurante restaurante){
-		try {
-			restaurante = cadastroRestauranteService.salvar(restaurante);
-			
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(restaurante);
-		}catch (EntidadeNaoEncontradaException erro) {
-			//badRequest para notificar que alguma coisa incluida foi errada
-			return ResponseEntity.badRequest()
-					.body(erro.getMessage());
-		}
-	
+	public Restaurante adicionar( @RequestBody Restaurante restaurante){
+		 return cadastroRestauranteService.salvar(restaurante);
 	}
 	
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizar (@PathVariable Long restauranteId, 
+	public Restaurante atualizar (@PathVariable Long restauranteId, 
 			@RequestBody Restaurante restaurante){
 		
-		try {
-			//buscar o restaurante
-			Optional <Restaurante>  restauranteAtual = restauranteRepository.findById(restauranteId);
-			
-			if(restauranteAtual.isPresent()) {
-				//copiar o obj recebido e passar para o obj atual
-				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id",
-						"formasPagamento","endereco","dataCadastro","dataAtualizacao","produtos");
-	            // em aspas são declaradas as propriedades ignoradas
-				
-			    //salvar cozinha atual 
-				Restaurante restauranteSalva = cadastroRestauranteService.salvar(restauranteAtual.get());
-				 //status ok
-			    return ResponseEntity.ok(restauranteSalva);
-			} else {
-				return ResponseEntity.notFound().build();
-			}
-			
-		} catch (EntidadeNaoEncontradaException erro) {
-			//badRequest para notificar que alguma coisa incluida foi errada
-			return ResponseEntity.badRequest()
-					.body(erro.getMessage());
-		}
-		
+		  Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
+		    
+		 BeanUtils.copyProperties(restaurante, restauranteAtual, 
+		  "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+		    
+		 return cadastroRestauranteService.salvar(restauranteAtual);
 		
 	}
 
