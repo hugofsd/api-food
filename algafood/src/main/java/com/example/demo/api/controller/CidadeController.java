@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
+import com.example.demo.domain.exception.NegocioException;
 import com.example.demo.domain.model.Cidade;
 import com.example.demo.domain.model.Estado;
 import com.example.demo.domain.repository.CidadeRepository;
@@ -53,10 +54,13 @@ public class CidadeController {
 		Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		
 		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+	    try {
+			return cadastroCidadeService.salvar(cidadeAtual);
+	    } catch (EntidadeNaoEncontradaException e){
+	     throw new NegocioException(e.getMessage()); //se o estado não existir
+	     }
 		
-		return cadastroCidadeService.salvar(cidadeAtual);
-		
-		}
+        }
 	
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -67,7 +71,11 @@ public class CidadeController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cidade adicionar (@RequestBody Cidade cidade) {
-		return cadastroCidadeService.salvar(cidade);
+		  try {
+				return cadastroCidadeService.salvar(cidade);
+		    } catch (EntidadeNaoEncontradaException e){
+		    throw new NegocioException(e.getMessage()); //se o estado não existir
+		    }
 	}
 	
 }
