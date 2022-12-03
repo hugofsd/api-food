@@ -50,14 +50,15 @@ public class CidadeController {
 	public Cidade atualizar(@PathVariable("cidadeId") Long cidadeId,
 			@RequestBody Cidade cidade){
 		
-		//buscar cidade
-		Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 	    try {
+	    	//buscar cidade
+			Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
+			
+			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 			return cadastroCidadeService.salvar(cidadeAtual);
 	    } catch (EntidadeNaoEncontradaException e){
-	     throw new NegocioException(e.getMessage()); //se o estado não existir
+	     throw new NegocioException(e.getMessage(), e); //se o estado não existir, "e" causa
 	     }
 		
         }
@@ -74,7 +75,7 @@ public class CidadeController {
 		  try {
 				return cadastroCidadeService.salvar(cidade);
 		    } catch (EntidadeNaoEncontradaException e){
-		    throw new NegocioException(e.getMessage()); //se o estado não existir
+		    throw new NegocioException(e.getMessage(), e); //se o estado não existir
 		    }
 	}
 	
