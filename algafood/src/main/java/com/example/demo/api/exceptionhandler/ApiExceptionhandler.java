@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.exception.NegocioException;
 
@@ -40,6 +41,17 @@ public class ApiExceptionhandler {
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(problema);
+	}
+	
+	//método para tratar EntidadeEmUsoException
+	@ExceptionHandler(EntidadeEmUsoException.class)
+	public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException e) {
+	    Problema problema = Problema.builder()
+	            .dataHora(LocalDateTime.now())
+	            .mensagem(e.getMessage()).build();
+	    
+	    return ResponseEntity.status(HttpStatus.CONFLICT)
+	            .body(problema);
 	}
 	
 }
