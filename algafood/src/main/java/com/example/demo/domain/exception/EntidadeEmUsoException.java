@@ -3,8 +3,9 @@ package com.example.demo.domain.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//abstract : não pode ser estanciada, da erro caso usada diretamente um service
 @ResponseStatus(HttpStatus.CONFLICT)
-public class EntidadeEmUsoException extends RuntimeException {
+public abstract class EntidadeEmUsoException extends RuntimeException {
 
 	/**
 	 * 

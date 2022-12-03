@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.exception.CidadeNaoEncontradaException;
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.model.Cidade;
@@ -51,20 +52,15 @@ public class CadastroCidadeService {
 	     	String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId));
 	      }  
       catch (DataIntegrityViolationException erro) {
-    	    throw new EntidadeEmUsoException(
-    	    String.format(MSG_CIDADE_EM_USO , cidadeId));
+           throw new CidadeNaoEncontradaException(cidadeId);
 	      }
 
        }
 	
 	public Cidade buscarOuFalhar(Long cidadeId) {
-		return cidadeRepository.findById(cidadeId)
-	    .orElseThrow(() -> new
-	    EntidadeNaoEncontradaException(
-	   String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
-	    		
+	    return cidadeRepository.findById(cidadeId)
+	        .orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
 	}
-	
 	
 	
 }

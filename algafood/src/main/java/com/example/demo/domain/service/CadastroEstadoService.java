@@ -32,8 +32,7 @@ public class CadastroEstadoService {
 			throw new EstadoNaoEncontradaException(estadoId);
 			
 		} catch(DataIntegrityViolationException erro) {
-			throw new EntidadeEmUsoException(
-			String.format(MSG_ESTADO_EM_USO , estadoId));
+			throw new EstadoNaoEncontradaException(estadoId);
 		}
 	}
 	
