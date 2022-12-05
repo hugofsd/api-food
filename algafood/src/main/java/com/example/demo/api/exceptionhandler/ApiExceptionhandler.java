@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
@@ -13,8 +14,9 @@ import com.example.demo.domain.exception.NegocioException;
 
 //classe rersponsavel por capturar as exeções do projeto
 @ControllerAdvice
-public class ApiExceptionhandler {
+public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 
+	//ResponseEntityExceptionHandler: tratar varias exceptions ao mesmo tempo
 	
 	//metodo para tratamento de mensagem somente para mensagem
 	//ExceptionHandler: aceita o argumento(classe que eu quero tratar
