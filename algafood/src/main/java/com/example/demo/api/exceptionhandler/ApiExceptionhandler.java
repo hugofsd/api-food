@@ -2,10 +2,12 @@ package com.example.demo.api.exceptionhandler;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.domain.exception.EntidadeEmUsoException;
@@ -55,5 +57,21 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	    return ResponseEntity.status(HttpStatus.CONFLICT)
 	            .body(problema);
 	}
+	
+	
+	//handleex.. ctrl+space
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		// TODO Auto-generated method stub
+		
+		 body = Problema.builder()
+		      .dataHora(LocalDateTime.now())
+		      .mensagem(status.getReasonPhrase()) //descrição do status
+		      .build();
+		
+		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+	
 	
 }
