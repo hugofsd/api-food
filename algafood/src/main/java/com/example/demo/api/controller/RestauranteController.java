@@ -44,9 +44,8 @@ public class RestauranteController {
 		return restauranteRepository.findAll();
 	}
 	
-	@GetMapping ("/{restauranteId}")
-	public  Restaurante buscar( @PathVariable("restauranteId") Long restauranteId) {
-	
+	@GetMapping("/{restauranteId}")
+	public Restaurante buscar(@PathVariable Long restauranteId) {
 		return cadastroRestauranteService.buscarOuFalhar(restauranteId);
 	}
 	

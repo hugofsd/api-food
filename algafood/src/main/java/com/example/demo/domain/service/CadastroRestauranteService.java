@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
+import com.example.demo.domain.exception.RestauranteNaoEncontradoException;
 import com.example.demo.domain.model.Cozinha;
 import com.example.demo.domain.model.Restaurante;
 import com.example.demo.domain.repository.CozinhaRepository;
@@ -42,9 +43,8 @@ public class CadastroRestauranteService {
 	}
 	
 	public Restaurante buscarOuFalhar(Long restauranteId) {
-	    return restauranteRepository.findById(restauranteId)
-	        .orElseThrow(() -> new EntidadeNaoEncontradaException(
-	                String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
+		return restauranteRepository.findById(restauranteId)
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
 	}
 	
 }
