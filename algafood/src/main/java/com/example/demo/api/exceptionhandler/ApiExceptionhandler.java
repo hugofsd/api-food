@@ -37,14 +37,6 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 		Problem problem = createProblemBuider(status, problemType, datail)
 				.build();
 		
-		//String detail = ex.getMessage();
-		//		Problem problem = Problem.builder()
-		//				.status(status.value())
-		//				.type("https://www.youtube.com/watch?v=M55eHQrqGBs&ab_channel=flosqui")
-		//				.title("Entidade não encontrada")
-		//				.detail(detail)
-		//				.build();
-		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), 
 				status, request);
 	}
@@ -53,14 +45,31 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> tratarEntidadeEmUsoException(
 			EntidadeEmUsoException ex, WebRequest request) {
 		
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), 
-				HttpStatus.CONFLICT, request);
+		HttpStatus status = HttpStatus.CONFLICT;
+		
+		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+		
+		String datail = ex.getMessage();
+		
+		Problem problem = createProblemBuider(status, problemType, datail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), 
+				status, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<?> tratarNegocioException(NegocioException ex, WebRequest request) {
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), 
-				HttpStatus.BAD_REQUEST, request);
+	
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+		
+		String datail = ex.getMessage();
+		
+		Problem problem = createProblemBuider(status, problemType, datail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), 
+				status, request);
 	}
 	
 	@Override
