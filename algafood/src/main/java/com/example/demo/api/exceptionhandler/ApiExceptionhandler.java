@@ -2,9 +2,12 @@ package com.example.demo.api.exceptionhandler;
 
 import java.time.LocalDateTime;
 
+
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -17,6 +20,17 @@ import com.example.demo.domain.exception.NegocioException;
 //classe rersponsavel por capturar as exeções do projeto
 @ControllerAdvice
 public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
+	
+	
+	//handleHttpMessageNotWri + ctrl / space
+	//metodo para tratar
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		// TODO Auto-generated method stub
+		return super.handleHttpMessageNotWritable(ex, headers, status, request);
+	}
+	
 
 	//ResponseEntityExceptionHandler: tratar varias exceptions ao mesmo tempo
 	
