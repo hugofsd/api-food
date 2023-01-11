@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +24,20 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	
 	
 	//handleHttpMessageNotWri + ctrl / space
-	//metodo para tratar
+	//metodo para tratar erro 400 em caso de corpo errado em put por ex...
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex,
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		// TODO Auto-generated method stub
-		return super.handleHttpMessageNotWritable(ex, headers, status, request);
+		
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPRIEENSIVEL;
+		
+		String datail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+		
+		Problem problem = createProblemBuider(status, problemType, datail)
+				.build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), 
+				status, request);
 	}
 	
 
