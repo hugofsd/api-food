@@ -53,9 +53,10 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 	
+		//ref:refernecuia
 		String path = ex.getPath().stream()
 				.map(ref -> ref.getFieldName())
-				.collect(Collectors.joining("."));
+				.collect(Collectors.joining(".")); 
 		
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPRIEENSIVEL;
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s', "
