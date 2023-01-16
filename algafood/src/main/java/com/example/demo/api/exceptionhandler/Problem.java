@@ -27,4 +27,7 @@ public class Problem {
 	// descrição detalhada da ocorrencia do problema
 	private String detail; 
 	
+	// mensagem para o usuario
+	private String userMenssage;
+	
 }
