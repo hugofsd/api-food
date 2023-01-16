@@ -13,7 +13,9 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.beans.TypeMismatchException;
 
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
@@ -55,6 +57,33 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), 
 				status, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		
+		if (ex instanceof MethodArgumentTypeMismatchException) {
+			return handleMethodArgumentTypeMismatch(
+					(MethodArgumentTypeMismatchException) ex, headers, status, request);
+		}
+	
+		return super.handleTypeMismatch(ex, headers, status, request);
+	}
+	
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+	        MethodArgumentTypeMismatchException ex, HttpHeaders headers,
+	        HttpStatus status, WebRequest request) {
+
+	    ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
+
+	    String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
+	            + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
+	            ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+
+	    Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+	    return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 	
 
