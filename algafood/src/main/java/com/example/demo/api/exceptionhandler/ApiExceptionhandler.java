@@ -1,6 +1,7 @@
 package com.example.demo.api.exceptionhandler;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -18,6 +19,9 @@ import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 
 //classe rersponsavel por capturar as exeções do projeto
 @ControllerAdvice
@@ -33,12 +37,16 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 		//Throwable:tipo de exception(super). rootCause=causaraiz
 		Throwable rootCause = ExceptionUtils.getRootCause(ex); //causa raiz do erro
 		
-		if(rootCause instanceof InvalidFormatException) {
+		if(rootCause instanceof InvalidFormatException){
 			return handleInvalidFormatException((InvalidFormatException) rootCause,
 					headers, status, request);
+		} else if (rootCause instanceof PropertyBindingException) {
+			return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request); 
 		}
 		
-		ProblemType problemType = ProblemType.MENSAGEM_INCOMPRIEENSIVEL;
+		
+		
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		
 		String datail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 		
@@ -50,15 +58,29 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	}
 	
 
+	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
+	        HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+	    // Criei o método joinPath para reaproveitar em todos os métodos que precisam
+	    // concatenar os nomes das propriedades (separando por ".")
+	    String path = joinPath(ex.getPath());
+	    
+	    ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+	    String detail = String.format("A propriedade '%s' não existe. "
+	            + "Corrija ou remova essa propriedade e tente novamente.", path);
+
+	    Problem problem = createProblemBuilder(status, problemType, detail).build();
+	    
+	    return handleExceptionInternal(ex, problem, headers, status, request);
+	}  
+	
+	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 	
-		//ref:refernecuia
-		String path = ex.getPath().stream()
-				.map(ref -> ref.getFieldName())
-				.collect(Collectors.joining(".")); 
+		 String path = joinPath(ex.getPath());
 		
-		ProblemType problemType = ProblemType.MENSAGEM_INCOMPRIEENSIVEL;
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s', "
 				+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
@@ -151,5 +173,12 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 			.title(problemType.getTitle())
 			.detail(detail);
 	}
+	
+
+	private String joinPath(List<Reference> references) {
+	    return references.stream()
+	        .map(ref -> ref.getFieldName())
+	        .collect(Collectors.joining("."));
+	}     
 	
 }
