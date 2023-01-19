@@ -1,6 +1,7 @@
 package com.example.demo.api.exceptionhandler;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -29,5 +30,20 @@ public class Problem {
 	
 	// mensagem para o usuario
 	private String userMenssage;
+	
+	// lista de propriedades
+	private List<Field> filds;
+	
+	
+	
+	@Getter
+	@Builder
+	public static class Field {
+		
+		private String name;
+		
+		private String userMessage;
+		
+	}
 	
 }
