@@ -16,7 +16,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -36,11 +40,14 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID
 	private Long id;
 	
-	@NotNull
+	//@NotNull
+	//@NotEmpty //não permite nome vazio
+	@NotBlank // n pode ser nullo,vazio ou em branco
 	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
-	
+	//@DecimalMin("0") //no minimo o valor de 0
+	@PositiveOrZero // no minimo valor positivo ou zero
 	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
