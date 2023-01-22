@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -69,6 +70,7 @@ public class Restaurante {
 	// muitos restaurantes tem 1 cozinha
 	//@JsonIgnoreProperties("hibernateLazyInitializer") //ignorar uma propriedade da cozinha
 	//@JsonIgnore  //ignorar a cozinha
+	@Valid // valide as propriedades de cozinha, encontra um not null na entidade Cozinha
 	@ManyToOne ///(fetch = FetchType.LAZY) //Carregar apenas quando precisar, n fazer select
 	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;

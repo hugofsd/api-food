@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,6 +25,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // gerar hascode e equals direto na var 
 public class Cozinha {
 
+	@NotNull
 	@EqualsAndHashCode.Include 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID
