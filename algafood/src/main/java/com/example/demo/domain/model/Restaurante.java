@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.NonNull;
 
+import com.example.demo.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,12 +44,12 @@ public class Restaurante {
 	
 	//@NotNull
 	//@NotEmpty //não permite nome vazio
-	@NotBlank // n pode ser nullo,vazio ou em branco
+	@NotBlank (groups = Groups.CadastroRestaurante.class) // n pode ser nullo,vazio ou em branco
 	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
 	//@DecimalMin("0") //no minimo o valor de 0
-	@PositiveOrZero // no minimo valor positivo ou zero
+	@PositiveOrZero (groups = Groups.CadastroRestaurante.class) // no minimo valor positivo ou zero
 	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
@@ -71,6 +72,7 @@ public class Restaurante {
 	//@JsonIgnoreProperties("hibernateLazyInitializer") //ignorar uma propriedade da cozinha
 	//@JsonIgnore  //ignorar a cozinha
 	@Valid // valide as propriedades de cozinha, encontra um not null na entidade Cozinha
+    @NotNull (groups = Groups.CadastroRestaurante.class)
 	@ManyToOne ///(fetch = FetchType.LAZY) //Carregar apenas quando precisar, n fazer select
 	@JoinColumn(name="cozinha_id", nullable = false) // nome da coluna
 	private Cozinha cozinha;
