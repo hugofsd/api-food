@@ -27,7 +27,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // gerar hascode e equals direto na var 
 public class Cozinha {
 
-	@NotNull(groups = Groups.CadastroRestaurante.class)
+	@NotNull(groups = Groups.CozinhaId.class)
 	@EqualsAndHashCode.Include 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ENCREMENTO DE ID

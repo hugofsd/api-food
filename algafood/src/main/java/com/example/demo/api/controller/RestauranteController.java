@@ -50,8 +50,7 @@ public class RestauranteController {
 	//@Valid antes de executar já é feita a validação, pegando o notnull do model
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar( @RequestBody @Validated(Groups.CadastroRestaurante.class)
-	Restaurante restaurante){
+	public Restaurante adicionar( @RequestBody @Valid Restaurante restaurante){
 		try {
 			return cadastroRestauranteService.salvar(restaurante);
 		} catch (CozinhaNaoEncontradaException e) {
