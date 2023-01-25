@@ -61,7 +61,7 @@ public class CozinhaController {
 	//ResponseEntity usado pois o obj será tratado
 	@PutMapping("/{cozinhaId}")
 	public Cozinha atualizar(@PathVariable Long cozinhaId,
-	@RequestBody Cozinha cozinha) {
+	@RequestBody @Valid Cozinha cozinha) {
 		
 		Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 	
