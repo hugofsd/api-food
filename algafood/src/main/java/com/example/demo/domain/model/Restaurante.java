@@ -46,7 +46,7 @@ public class Restaurante {
 	
 	//@NotNull
 	//@NotEmpty //não permite nome vazio
-	@NotBlank// n pode ser nullo,vazio ou em branco
+	@NotBlank(message = "O nome do restaurante é obrigatório")// n pode ser nullo,vazio ou em branco
 	@Column(nullable = false) //nullable : não aceita nullo
 	private String nome;
 	
