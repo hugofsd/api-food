@@ -52,7 +52,7 @@ public class Restaurante {
 	
 	//@DecimalMin("0") //no minimo o valor de 0
 	@NotNull
-	@PositiveOrZero // no minimo valor positivo ou zero
+	@PositiveOrZero(message = "{TaxaFrete.invalida}") // no minimo valor positivo ou zero
 	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
