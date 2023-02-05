@@ -19,6 +19,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
@@ -32,6 +35,9 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 @ControllerAdvice
 public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -42,10 +48,15 @@ public class ApiExceptionhandler extends ResponseEntityExceptionHandler {
 	    BindingResult bindingResult = ex.getBindingResult();
 	    
 	    List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
-	    		.map(fieldError -> Problem.Field.builder()
+	    		.map(fieldError ->{ 
+	    			String message = messageSource.getMessage(fieldError,
+	    				LocaleContextHolder.getLocale());
+	    				
+	    		 return Problem.Field.builder()
 	    				.name(fieldError.getField())
-	    				.userMessage(fieldError.getDefaultMessage())
-	    				.build())
+	    				.userMessage(message)
+	    				.build();
+	    		})
 	    		.collect(Collectors.toList());
 	    
 	    Problem problem = createProblemBuilder(status, problemType, detail)
