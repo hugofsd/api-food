@@ -30,6 +30,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.NonNull;
 
 import com.example.demo.core.validation.Groups;
+import com.example.demo.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,7 +53,8 @@ public class Restaurante {
 	
 	//@DecimalMin("0") //no minimo o valor de 0
 	@NotNull
-	@PositiveOrZero//(message = "{TaxaFrete.invalida}") // no minimo valor positivo ou zero
+	//@PositiveOrZero//(message = "{TaxaFrete.invalida}") // no minimo valor positivo ou zero
+	@TaxaFrete
 	@Column(name="taxa_frete", nullable = false) // nome da coluna
 	private BigDecimal taxaFrete;
 	
