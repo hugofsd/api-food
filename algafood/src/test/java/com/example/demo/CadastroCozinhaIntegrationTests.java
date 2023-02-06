@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.domain.exception.CozinhaNaoEncontradaException;
 import com.example.demo.domain.exception.EntidadeEmUsoException;
+import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.model.Cozinha;
 import com.example.demo.domain.service.CadastroCozinhaService;
 
@@ -52,6 +53,33 @@ public class CadastroCozinhaIntegrationTests {
 	  });
 	}
 	
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
+	  assertThrows(EntidadeEmUsoException.class, () -> {
+	    cadastroCozinhaService.excluir(1L);
+	  });
+	}
+	
+	@Test
+	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+	  assertThrows(EntidadeNaoEncontradaException.class, () -> {
+	    cadastroCozinhaService.excluir(100L);
+	  });
+	}
+	
+//	A função deveFalhar_QuandoExcluirCozinhaInexistente é um teste
+//	automatizado que verifica se o sistema está comportando corretamente
+//	ao excluir uma cozinha que não existe.
+//
+//	Nesta função, utiliza-se o método assertThrows para esperar 
+//	uma exceção do tipo CozinhaNaoEncontradaException ao tentar 
+//	excluir uma cozinha com id 100L, que supostamente não existe.
+//
+//	Se a exceção CozinhaNaoEncontradaException for lançada, o teste
+//	será considerado como passado. Caso contrário, o teste falhará. 
+//	Este teste é importante para garantir que o sistema trate corretamente 
+//	situações de tentativa de exclusão de cozinhas inexistentes e
+//	evite erros no sistema.
 
 
 	

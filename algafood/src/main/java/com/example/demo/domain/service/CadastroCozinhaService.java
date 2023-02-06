@@ -34,15 +34,13 @@ public class CadastroCozinhaService {
 	public void excluir (Long cozinhaId) {
 		try {
 			cozinhaRepository.deleteById(cozinhaId);
-		} catch(EmptyResultDataAccessException erro) {
 			
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-//			String.format("Não existe um cadastro de cozinha com o codigo %d", cozinhaId));		
-			throw new EntidadeNaoEncontradaException(
-			String.format(MSG_COZINHA_NAO_ENCONTRADA, cozinhaId));	
-		}
-		 catch(DataIntegrityViolationException erro){
-			  throw new CozinhaNaoEncontradaException(cozinhaId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new CozinhaNaoEncontradaException(cozinhaId);
+		
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+				String.format(MSG_COZINHA_EM_USO, cozinhaId));
 		}
 		
 	}
