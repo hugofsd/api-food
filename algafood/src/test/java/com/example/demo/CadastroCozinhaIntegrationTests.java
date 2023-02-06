@@ -1,19 +1,27 @@
 package com.example.demo;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.demo.domain.exception.CozinhaNaoEncontradaException;
+import com.example.demo.domain.exception.EntidadeEmUsoException;
 import com.example.demo.domain.model.Cozinha;
 import com.example.demo.domain.service.CadastroCozinhaService;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CadastroCozinhaIntegrationTests {
 
@@ -21,7 +29,7 @@ public class CadastroCozinhaIntegrationTests {
 	private CadastroCozinhaService cadastroCozinhaService;
 	
 	@Test
-	public void testarCadastroCozinhaComSucesso() {
+	public void deveAtribuirId_QuandoCadastrarCozinhaComDadosCorretos() {
 		//cenario
 		Cozinha novaCozinha = new Cozinha();
 		novaCozinha.setNome("Chinesa");
@@ -34,17 +42,18 @@ public class CadastroCozinhaIntegrationTests {
 		assertThat(novaCozinha.getId()).isNotNull();
 	}
 	
+	//exemplo que deu certo
 	@Test
-	public void testarCadastroCozinhaSemNome() {
-	   Cozinha novaCozinha = new Cozinha();
-	   novaCozinha.setNome(null);
-	   
-	   ConstraintViolationException erroEsperado =
-	      Assertions.assertThrows(ConstraintViolationException.class, () -> {
-	    	  cadastroCozinhaService.salvar(novaCozinha);
-	      });
-	   
-	   assertThat(erroEsperado).isNotNull();
+	public void deveFalhar_QuandoCadastrarCozinhaSemNome() {
+	  assertThrows(ConstraintViolationException.class, () -> {
+	    Cozinha novaCozinha = new Cozinha();
+	    novaCozinha.setNome(null);
+	    novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
+	  });
 	}
+	
+
+
+	
 
 }
