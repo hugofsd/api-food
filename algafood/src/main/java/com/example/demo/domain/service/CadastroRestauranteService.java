@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.exception.EntidadeNaoEncontradaException;
 import com.example.demo.domain.exception.RestauranteNaoEncontradoException;
@@ -28,6 +29,7 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CadastroCozinhaService cadastoCozinhaService;
 	
+	@Transactional //colocar em todos os metodos publicos
 	public Restaurante salvar (Restaurante restaurante) {
 		
 		//buscar id da cozinha atrelada ao restaurante
