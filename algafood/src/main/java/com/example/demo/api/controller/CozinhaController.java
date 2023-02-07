@@ -29,7 +29,7 @@ import com.example.demo.domain.repository.CozinhaRepository;
 import com.example.demo.domain.service.CadastroCozinhaService;
 
 @RestController
-@RequestMapping("/cozinhas")
+@RequestMapping(value = "/cozinhas")
 public class CozinhaController {
 
 	@Autowired
@@ -38,8 +38,7 @@ public class CozinhaController {
 	@Autowired
 	private CadastroCozinhaService cadastroCozinhaService;
 	
-	// Deu certo apenas dando run do AlgaFoodApplication
-	@GetMapping (produces = MediaType.APPLICATION_JSON_VALUE) // Retorno apenas em json
+	@GetMapping
 	public List<Cozinha> listar() {
 		return cozinhaRepository.findAll();
 	}
