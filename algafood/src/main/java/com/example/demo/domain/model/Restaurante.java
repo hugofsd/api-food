@@ -32,6 +32,8 @@ import org.springframework.lang.NonNull;
 import com.example.demo.core.validation.Groups;
 import com.example.demo.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -74,7 +76,7 @@ public class Restaurante {
 	private LocalDateTime dataAtualizacao;
 	
 	// muitos restaurantes tem 1 cozinha
-	//@JsonIgnoreProperties("hibernateLazyInitializer") //ignorar uma propriedade da cozinha
+	@JsonIgnoreProperties(value="nome", allowGetters = true) //ignorar uma propriedade da cozinha, permitindo get
 	//@JsonIgnore  //ignorar a cozinha
 	@Valid // valide as propriedades de cozinha, encontra um not null na entidade Cozinha
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class) //Convertendo grupos de constraints para validação em cascata com @ConvertGroup
